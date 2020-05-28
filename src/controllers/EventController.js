@@ -1,22 +1,19 @@
-const Ticket = require('../models/Ticket')
 const Event = require('../models/Event')
-const responseCodes = require('../utils/responseCodes')
 
 module.exports = {
 
-  async getEventById (req, res) {
+  async getEventById(req, res) {
     const { id } = req.params
 
     const event = await Event.findById(id)
 
     return res.json(event)
   },
-  async getAllEvents (req, res) {
-    // const events = await Event.find().sort('createdAt')
+  async getAllEvents(req, res) {
     const events = await Event.find().populate('tickets')
     return res.json(events)
   },
-  async createEvent (req, res) {
+  async createEvent(req, res) {
     try {
       const { requestValid, invalidFields } = checkRequest(req.body)
       if (!requestValid) {
@@ -29,16 +26,16 @@ module.exports = {
       return res.status(500).json({ status: 'error' })
     }
   },
-  async deleteEventById (req, res) {
+  async deleteEventById(req, res) {
     await Event.deleteOne({ _id: req.params.id })
     return res.json({ ok: true })
   },
-  async deleteAllEvents (req, res) {
+  async deleteAllEvents(req, res) {
     await Event.remove()
     return res.json({ ok: true })
   }
 }
-function checkRequest (request) {
+function checkRequest(request) {
   const { eventName, eventDate, eventLatitude, eventLongitude, eventPlace, eventDescription } = request
 
   const invalidFields = []
@@ -65,7 +62,7 @@ function checkRequest (request) {
   return { requestValid: invalidFields.length === 0, invalidFields }
 }
 
-async function createEvent (request) {
+async function createEvent(request) {
   const { eventName, eventDate, eventLatitude, eventLongitude, eventPlace, eventDescription } = request
 
   const event = await Event.create({

@@ -4,14 +4,12 @@ const routes = express.Router()
 const UserController = require('./controllers/UserController')
 const TicketController = require('./controllers/TicketController')
 const EventController = require('./controllers/EventController')
-const ConfirmationCodeController = require('./controllers/ConfirmationCodeController')
 
 routes.post('/user/login', UserController.login)
 routes.post('/user', UserController.createUser)
 routes.get('/user/all', UserController.getAllUsers)
 routes.get('/user/:id', UserController.getUserById)
 routes.delete('/user/:id', UserController.deleteUserById)
-routes.patch('/user/:id/password', UserController.changePassword)
 
 routes.post('/ticket/:userId', TicketController.buyTicketByUserId)
 
@@ -31,9 +29,5 @@ routes.get('/event/all', EventController.getAllEvents)
 routes.delete('/event/all', EventController.deleteAllEvents)
 routes.get('/event/:id', EventController.getEventById)
 routes.delete('/event/:id', EventController.deleteEventById)
-
-routes.post('/confirmationCode', ConfirmationCodeController.sendCode)
-routes.get('/confirmationCode/:email', ConfirmationCodeController.getConfirmationCodeByEmail)
-routes.delete('/confirmationCode/:email', ConfirmationCodeController.deleteAllCodes)
 
 module.exports = routes

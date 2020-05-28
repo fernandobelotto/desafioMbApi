@@ -14,8 +14,6 @@ routes.delete('/user/:id', UserController.deleteUserById)
 routes.post('/ticket/:userId', TicketController.buyTicketByUserId)
 
 routes.post('/ticket', TicketController.createTicket)
-routes.post('/ticket/list', TicketController.createTicketsByList)
-routes.post('/ticket/refund:id', TicketController.refundTicketById)
 routes.get('/ticket/all', TicketController.getAllTickets)
 routes.delete('/ticket/all', TicketController.deleteAllTickets)
 routes.get('/ticket/:userId', TicketController.getAllTicketsByUserId)

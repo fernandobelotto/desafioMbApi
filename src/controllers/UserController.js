@@ -5,16 +5,16 @@ const moment = require('moment')
 
 module.exports = {
 
-  async getUserById (req, res) {
+  async getUserById(req, res) {
     const { id } = req.params
     const user = await User.findById(id)
     return res.json(user)
   },
-  async getAllUsers (req, res) {
+  async getAllUsers(req, res) {
     const users = await User.find().sort('createdAt')
     return res.json(users)
   },
-  async createUser (req, res) {
+  async createUser(req, res) {
     try {
       const { email, password, loginOption } = req.body
 
@@ -38,11 +38,11 @@ module.exports = {
       return res.status(500).json({ status: 'error' })
     }
   },
-  async deleteUserById (req, res) {
+  async deleteUserById(req, res) {
     await User.deleteOne({ _id: req.params.id })
     return res.json({ ok: true })
   },
-  async login (req, res) {
+  async login(req, res) {
     try {
       const { email, password, loginOption } = req.body
 
@@ -64,7 +64,7 @@ module.exports = {
   }
 }
 
-function checkRequest (request) {
+function checkRequest(request) {
   const { name, email, password, loginOption } = request
 
   const invalidFields = []
@@ -85,12 +85,12 @@ function checkRequest (request) {
   return { requestValid: invalidFields.length === 0, invalidFields }
 }
 
-async function checkIfEmailIsRegistred (email) {
+async function checkIfEmailIsRegistred(email) {
   const userRegistred = await User.find({ email })
   return userRegistred.length > 0
 }
 
-async function createNewUser (request) {
+async function createNewUser(request) {
   const { email, name, password, loginOption } = request
 
   const user = await User.create({
@@ -103,14 +103,14 @@ async function createNewUser (request) {
   return user
 }
 
-function checkLoginOption (loginOption, password) {
+function checkLoginOption(loginOption, password) {
   if (loginOption === 'email') {
     return encrypt(password)
   }
   return false
 }
 
-function checkPassword (user, password) {
+function checkPassword(user, password) {
   const encryptedPassword = encrypt(password)
 
   return user.password === encryptedPassword

@@ -19,10 +19,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tickets: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'Ticket'
-  }],
   createdAt: {
     type: Date,
     default: Date.now

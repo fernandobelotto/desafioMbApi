@@ -52,13 +52,6 @@ module.exports = {
     await Event.updateMany({}, { tickets: [] })
     return res.json({ ok: true, status: 'all tickets deleted' })
   },
-  async createTicketsByList (req, res) {
-    return res.json({ ok: true, status: 'list of tickets create' })
-  },
-  async refundTicketById (req, res) {
-    await Ticket.deleteOne({ _id: req.params.id })
-    return res.json({ ok: true, status: 'ticket deleted' })
-  },
   async deleteAllTicketsByEvent (req, res) {
     const { eventId } = req.params
     const eventRegistred = await findEvent(eventId)
@@ -83,19 +76,10 @@ module.exports = {
       const { userId } = req.params
       const user = await User.findById(userId)
       const { tickets } = req.body
-      const listOfTicketsFound = []
 
       for (const ticket of tickets) {
-        const ticketFound = await Ticket.find({ userId: null, _id: ticket })
-        console.log('ticketF :>> ', ticketFound)
-        listOfTicketsFound.push(ticketFound)
-      }
-
-      for (const ticket of listOfTicketsFound) {
-        ticket.userId = user._id
-        await ticket.save()
-        user.tickets.push(ticket._id)
-        await user.save()
+        const newTicket = await Ticket.findOneAndUpdate({ _id: ticket }, { userId: userId })
+        newTicket.save()
       }
       return res.status(200).json({ status: 'success, purchased tickets', user: user.name })
     } catch (error) {
@@ -105,7 +89,7 @@ module.exports = {
   },
   async getAllTicketsByUserId (req, res) {
     const { userId } = req.params
-    const tickets = await Ticket.find({ userId }).sort('createdAt')
+    const tickets = await Ticket.find({ userId }).populate('eventId')
     return res.json({ ok: true, tickets })
   }
 }
